@@ -1,0 +1,346 @@
+.data-table-container {
+  margin: 1rem 0;
+  
+  .table-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    
+    .table-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #2c3e50;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+      padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+      
+      .title-icon {
+        color: #667eea;
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      
+      .result-count {
+        color: #5a6c7d;
+        font-weight: 400;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+      }
+    }
+    
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      margin: 0 1.5rem;
+      
+      .data-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        
+        .header-cell {
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          color: #1e293b;
+          font-weight: 600;
+          font-size: 0.9rem;
+          padding: 1rem 1.25rem;
+          border: none;
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          border-bottom: 2px solid #e2e8f0;
+          
+          &.sortable-header {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            
+            &:hover {
+              background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+              transform: translateY(-1px);
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+            
+            &:active {
+              transform: translateY(0);
+            }
+          }
+          
+          .column-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            
+            .column-name {
+              font-weight: 700;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              font-size: 0.8rem;
+              color: #475569;
+              flex: 1;
+            }
+            
+            .sort-icon {
+              font-size: 1rem;
+              width: 1rem;
+              height: 1rem;
+              color: #94a3b8;
+              transition: all 0.2s ease;
+              
+              &.active {
+                color: #667eea;
+              }
+            }
+          }
+        }
+        
+        .data-cell {
+          padding: 0.875rem 1.25rem;
+          border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+          font-size: 0.9rem;
+          line-height: 1.4;
+          
+          .cell-content {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #2c3e50;
+          }
+          
+          &.number {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            color: #27ae60;
+            text-align: right;
+          }
+          
+          &.string {
+            color: #2c3e50;
+          }
+          
+          &.boolean {
+            font-weight: 600;
+            
+            .cell-content:contains('true') {
+              color: #27ae60;
+            }
+            
+            .cell-content:contains('false') {
+              color: #e74c3c;
+            }
+          }
+          
+          &.date {
+            color: #e67e22;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+          }
+          
+          &.null {
+            color: #95a5a6;
+            font-style: italic;
+          }
+          
+          &.object {
+            color: #e74c3c;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.8rem;
+          }
+        }
+        
+        .data-row {
+          transition: background-color 0.2s ease;
+          
+          &:hover {
+            background: rgba(102, 126, 234, 0.05);
+          }
+          
+          &:nth-child(even) {
+            background: rgba(102, 126, 234, 0.02);
+            
+            &:hover {
+              background: rgba(102, 126, 234, 0.08);
+            }
+          }
+        }
+      }
+    }
+    
+    .pagination-container {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(102, 126, 234, 0.1);
+      
+      .modern-paginator {
+        ::ng-deep .mat-mdc-paginator-container {
+          justify-content: center;
+        }
+        
+        ::ng-deep .mat-mdc-paginator-page-size {
+          margin-right: 1rem;
+        }
+        
+        ::ng-deep .mat-mdc-paginator-range-actions {
+          .mat-mdc-paginator-navigation-previous,
+          .mat-mdc-paginator-navigation-next,
+          .mat-mdc-paginator-navigation-first,
+          .mat-mdc-paginator-navigation-last {
+            color: #667eea;
+            
+            &:hover:not(:disabled) {
+              background: rgba(102, 126, 234, 0.1);
+            }
+          }
+          
+          .mat-mdc-paginator-navigation-previous:disabled,
+          .mat-mdc-paginator-navigation-next:disabled,
+          .mat-mdc-paginator-navigation-first:disabled,
+          .mat-mdc-paginator-navigation-last:disabled {
+            color: #bdc3c7;
+          }
+        }
+        
+        ::ng-deep .mat-mdc-paginator-range-label {
+          color: #5a6c7d;
+          font-weight: 500;
+        }
+      }
+    }
+    
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      color: #5a6c7d;
+      
+      .empty-icon {
+        font-size: 3rem;
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+      }
+      
+      .empty-text {
+        font-size: 1.1rem;
+        margin: 0;
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .data-table-container {
+    .table-card {
+      .table-title {
+        font-size: 1.1rem;
+        padding: 1rem 1rem 0.5rem 1rem;
+        
+        .title-icon {
+          font-size: 1.25rem;
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+        
+        .result-count {
+          font-size: 0.8rem;
+        }
+      }
+      
+      .table-wrapper {
+        margin: 0 1rem;
+        
+        .data-table {
+          .header-cell {
+            padding: 0.75rem 1rem;
+            font-size: 0.8rem;
+            
+            .column-header {
+              .column-name {
+                font-size: 0.75rem;
+              }
+              
+              .column-type {
+                font-size: 0.65rem;
+                padding: 0.1rem 0.4rem;
+              }
+            }
+          }
+          
+          .data-cell {
+            padding: 0.625rem 1rem;
+            font-size: 0.8rem;
+            
+            .cell-content {
+              max-width: 150px;
+            }
+          }
+        }
+      }
+      
+      .pagination-container {
+        padding: 0.75rem 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .data-table-container {
+    .table-card {
+      .table-title {
+        font-size: 1rem;
+        padding: 0.75rem 0.75rem 0.25rem 0.75rem;
+        
+        .title-icon {
+          font-size: 1.1rem;
+          width: 1.1rem;
+          height: 1.1rem;
+        }
+      }
+      
+      .table-wrapper {
+        margin: 0 0.75rem;
+        
+        .data-table {
+          .header-cell {
+            padding: 0.5rem 0.75rem;
+            
+            .column-header {
+              .column-name {
+                font-size: 0.7rem;
+              }
+              
+              .column-type {
+                font-size: 0.6rem;
+                padding: 0.05rem 0.3rem;
+              }
+            }
+          }
+          
+          .data-cell {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            
+            .cell-content {
+              max-width: 120px;
+            }
+          }
+        }
+      }
+      
+      .pagination-container {
+        padding: 0.5rem 0.75rem;
+      }
+    }
+  }
+} 

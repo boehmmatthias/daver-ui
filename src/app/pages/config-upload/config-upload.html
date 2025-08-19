@@ -1,0 +1,128 @@
+<div class="landing-container">
+  <!-- SVG Gradients for Modern Spinners -->
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="button-spinner-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+        <stop offset="50%" style="stop-color:#f0f8ff;stop-opacity:0.8" />
+        <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="analysis-spinner-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+        <stop offset="50%" style="stop-color:#764ba2;stop-opacity:0.8" />
+        <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+  </svg>
+  
+  <div class="landing-content">
+    <!-- Logo and Project Name -->
+    @if (isAnalyzing()) {
+      <div class="brand-section">
+        <img src="assets/images/daver_detective.png" alt="Daver Logo" class="logo">
+      </div>
+    } 
+
+    <!-- Config Upload Card -->
+    <mat-card class="upload-card" *ngIf="!isAnalyzing()">
+      <mat-card-content>
+        <h2 class="upload-title">Upload Database Configuration</h2>
+        <p class="upload-description">
+          Upload your database configuration file to connect and start exploring your data with Daver's intelligent chat interface.
+        </p>
+        
+        <!-- File Upload Area -->
+        <div class="file-upload-area" 
+             [class.drag-over]="isDragOver()"
+             (dragover)="onDragOver($event)"
+             (dragleave)="onDragLeave($event)"
+             (drop)="onDrop($event)">
+          <div class="upload-content" *ngIf="!selectedFile()">
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <h3>Drop your config file here</h3>
+            <p>or</p>
+            <button 
+              mat-stroked-button 
+              color="primary" 
+              class="browse-button"
+              (click)="fileInput.click()">
+              Browse Files
+            </button>
+            <p class="file-types">Supported format: YAML</p>
+          </div>
+          
+          <div class="file-selected" *ngIf="selectedFile()">
+            <mat-icon class="file-icon">description</mat-icon>
+            <div class="file-info">
+              <h3>{{ selectedFile()?.name }}</h3>
+              <p>{{ (selectedFile()?.size || 0) / 1024 | number:'1.1-1' }} KB</p>
+            </div>
+            <button 
+              mat-icon-button 
+              color="warn" 
+              class="remove-button"
+              (click)="removeFile()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          
+          <input 
+            #fileInput
+            type="file" 
+            accept=".yaml"
+            style="display: none;"
+            (change)="onFileSelected($event)">
+        </div>
+        
+        <!-- Upload Button -->
+        <button 
+          mat-raised-button 
+          color="primary" 
+          class="upload-button"
+          [disabled]="!selectedFile() || isUploading()"
+          (click)="uploadConfig()">
+          <div class="button-content">
+            <mat-icon *ngIf="!isUploading()">cloud_upload</mat-icon>
+            <mat-spinner 
+              *ngIf="isUploading()" 
+              diameter="20" 
+              class="modern-spinner">
+            </mat-spinner>
+            <span>{{ isUploading() ? 'Uploading...' : 'Upload Configuration' }}</span>
+          </div>
+        </button>
+        
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="errorMessage()">
+          <div class="error-content">
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <div class="error-text">
+              <h4>Upload Failed</h4>
+              <p>{{ errorMessage() }}</p>
+            </div>
+            <button 
+              mat-icon-button 
+              class="error-close"
+              (click)="errorMessage.set(null)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Analysis Loading Screen -->
+    <mat-card class="analysis-card" *ngIf="isAnalyzing()">
+      <mat-card-content>
+        <div class="analysis-content">
+          <mat-spinner 
+            class="analysis-spinner modern-analysis-spinner" 
+            diameter="100">
+          </mat-spinner>
+          <h2 class="analysis-title">Daver is analyzing your database</h2>
+          <p class="analysis-subtitle">This could take a minute</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

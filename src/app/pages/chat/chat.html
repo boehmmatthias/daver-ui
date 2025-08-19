@@ -1,0 +1,122 @@
+<div class="landing-container">
+  <div class="landing-content">
+    <!-- Chat Card -->
+    <mat-card class="chat-card">
+      <mat-card-content>
+        <div class="chat-header">
+          <h2 class="chat-title">Chat with Daver</h2>
+          <img src="assets/images/daver_dictionary.png" alt="Daver Dictionary" class="header-logo">
+        </div>
+        <div class="chat-description-container">
+          <p class="chat-description">
+            Ask questions about your data in natural language and get instant insights.
+          </p>
+          <mat-slide-toggle 
+            [ngModel]="debugMode()" 
+            (ngModelChange)="debugMode.set($event)"
+            color="primary"
+            class="debug-toggle">
+            Debug Mode
+          </mat-slide-toggle>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div class="chat-messages" #chatMessages>
+          <div class="message"
+               [class.user-message]="message.type === 'user'"
+               [class.bot-message]="message.type === 'bot'"
+               *ngFor="let message of allMessages()">
+            <div class="message-content">
+              <div class="message-text">{{ message.text }}</div>
+              <div class="message-time">{{ message.timestamp | date:'shortTime' }}</div>
+            </div>
+            
+            <!-- Debug Information for bot messages -->
+            <div class="debug-info" *ngIf="message.type === 'bot' && message.debugInfo && debugMode()">
+              <div class="debug-section" *ngIf="message.debugInfo.sqlQuery">
+                <div class="debug-label">
+                  <mat-icon class="debug-icon">code</mat-icon>
+                  SQL Query:
+                </div>
+                <div class="debug-content sql-query">{{ message.debugInfo.sqlQuery }}</div>
+              </div>
+              <div class="debug-section" *ngIf="message.debugInfo.requestTime !== undefined">
+                <div class="debug-label">
+                  <mat-icon class="debug-icon">schedule</mat-icon>
+                  Request Time:
+                </div>
+                <div class="debug-content">{{ message.debugInfo.requestTime }}ms</div>
+              </div>
+            </div>
+            
+            <!-- Data Table for bot messages with fetched data -->
+            <daver-data-table 
+              *ngIf="message.type === 'bot' && message.fetchedData"
+              [data]="message.fetchedData"
+              class="message-data-table">
+            </daver-data-table>
+
+            <!-- Retry Button for bot messages -->
+            <div class="message-actions" *ngIf="message.type === 'bot' && lastUserMessage()">
+              <button
+                mat-stroked-button
+                class="retry-button"
+                (click)="retryLastMessage()"
+                [disabled]="isLoading()">
+                <mat-icon>refresh</mat-icon>
+                Try Again
+              </button>
+            </div>
+          </div>
+
+          <!-- Loading indicator for bot response -->
+          <div class="message bot-message" *ngIf="isLoading()">
+            <div class="message-content">
+              <div class="message-text">
+                <mat-spinner diameter="20"></mat-spinner>
+                <span>Daver is thinking...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="chat-input-area">
+          <mat-form-field class="chat-input-field" appearance="outline">
+            <mat-label>Ask a question about your data...</mat-label>
+            <textarea
+              matInput
+              [ngModel]="userInput()"
+              (ngModelChange)="userInput.set($event)"
+              (keydown)="onKeyDown($event)"
+              placeholder="e.g., Show me all users who signed up last month&#10;Press Enter to send, Shift+Enter for new line"
+              [disabled]="isLoading()"
+              rows="1"
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="4">
+            </textarea>
+            <mat-icon matSuffix (click)="sendMessage()" class="send-icon">send</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="errorMessage()">
+          <div class="error-content">
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <div class="error-text">
+              <h4>Message Failed</h4>
+              <p>{{ errorMessage() }}</p>
+            </div>
+            <button
+              mat-icon-button
+              class="error-close"
+              (click)="errorMessage.set(null)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

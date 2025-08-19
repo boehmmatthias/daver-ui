@@ -1,0 +1,45 @@
+<div class="landing-container">
+  <div class="landing-content">
+    <!-- Logo and Project Name -->
+    <div class="brand-section">
+      <img src="assets/images/daver.png" alt="Daver Logo" class="logo">
+    </div>
+
+    <!-- Main Call to Action -->
+    <mat-card class="cta-card">
+      <mat-card-content>
+        <h2 class="cta-title">Ready to connect your database?</h2>
+        <p class="cta-description">
+          Upload your database configuration and start exploring your data with Daver's intelligent chat interface.
+        </p>
+        <button 
+          mat-raised-button 
+          color="primary" 
+          class="cta-button"
+          (click)="navigateToConfig()">
+          <mat-icon>database</mat-icon>
+          Connect to your database now
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Features Section -->
+    <div class="features-section">
+      <div class="feature">
+        <mat-icon class="feature-icon">chat</mat-icon>
+        <h3>Natural Language Queries</h3>
+        <p>Ask questions about your data in plain English</p>
+      </div>
+      <div class="feature">
+        <mat-icon class="feature-icon">security</mat-icon>
+        <h3>Secure & Private</h3>
+        <p>Your data stays on your infrastructure</p>
+      </div>
+      <div class="feature">
+        <mat-icon class="feature-icon">speed</mat-icon>
+        <h3>Lightning Fast</h3>
+        <p>Get instant insights from your database</p>
+      </div>
+    </div>
+  </div>
+</div>
